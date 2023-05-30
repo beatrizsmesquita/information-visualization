@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['treemap']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Location', 'Parent', 'Number of people (size)', 'Number of people (color)'],
+          ['DETI',       null,                 549,                               0],
+          ['Teaching',   'DETI',               400,                               400],
+          ['Research',    'DETI',              149,                               149],
+          ['Undergraduate','Teaching',         200,                               200],
+          ['Masters',  'Teaching',             200,                               200],
+          ['IEETA',    'Research',             87,                               87],
+          ['IT',        'Research',            62,                              62]
+          
+        ]);
+
+        tree = new google.visualization.TreeMap(document.getElementById('chart_div'));
+
+        tree.draw(data, {
+          minColor: '#f00',
+          midColor: '#ddd',
+          maxColor: '#0d0',
+          headerHeight: 15,
+          fontColor: 'black',
+          showScale: true
+        });
+
+      }
+    </script>
+  </head>
+  <body>
+    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+  </body>
+</html>
