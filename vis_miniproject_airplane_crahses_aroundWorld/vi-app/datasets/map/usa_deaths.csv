@@ -1,0 +1,51 @@
+location,code,fatalities
+Alabama,AL,93
+Alaska,AK,1273
+Arizona,AZ,347
+Arkansas,AR,67
+California,CA,1754
+Colorado,CO,345
+Connecticut,CT,75
+Delaware,DE,8
+Florida,FL,567
+Georgia,GA,594
+Hawaii,HI,290
+Idaho,ID,114
+Illinois,IL,688
+Indiana,IN,313
+Iowa,IA,165
+Kansas,KS,68
+Kentucky,KY,305
+Louisiana,LA,320
+Maine,ME,42
+Maryland,MD,320
+Massachusetts,MA,328
+Michigan,MI,399
+Minnesota,MN,113
+Mississippi,MS,53
+Missouri,MO,218
+Montana,MT,139
+Nebraska,NE,95
+Nevada,NV,392
+New Hampshire,NH,47
+New Jersey,NJ,485
+New Mexico,NM,153
+New York,NY,1558
+North Carolina,NC,392
+North Dakota,ND,14
+Ohio,OH,221
+Oklahoma,OK,103
+Oregon,OR,79
+Pennsylvania,PA,488
+Rhode Island,RI,17
+South Carolina,SC,87
+South Dakota,SD,8
+Tennessee,TN,113
+Texas,TX,604
+Utah,UT,237
+Vermont,VT,10
+Virginia,VA,545
+Washington,WA,444
+West Virginia,WV,190
+Wisconsin,WI,66
+Wyoming,WY,202
