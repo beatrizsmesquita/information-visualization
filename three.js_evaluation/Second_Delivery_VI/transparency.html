@@ -1,0 +1,124 @@
+<!--
+
+Lesson 2 - three.js Projections, lighting and transformations
+
+
+Author: Beatriz Mesquita (115367)
+
+Data: December of 2022
+
+-->
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>2nd Assignment</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<script src="https://threejs.org/build/three.js"></script>
+
+		<script>
+			// Created based on the tutorial available at: https://threejs.org/docs/index.html#manual/introduction/Creating-a-scene 
+			
+			
+			// Definition of the scene, camera, and renderer
+			const scene = new THREE.Scene();
+			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			// Definition of an object/geometry and camera position
+            var sphereGeometry = new THREE.SphereGeometry(1, 10, 10);
+            var sphereMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
+
+            var sphere1 = new THREE.Mesh(sphereGeometry, sphereMaterial);
+            sphere1.position.x = -2.5;
+
+            var sphere2 = new THREE.Mesh(sphereGeometry, sphereMaterial);
+            sphere2.position.x = 2.5;
+			
+
+            // Create larger cubes around the original spheres
+            var boxGeometry = new THREE.BoxGeometry(1, 1, 1); // Width, height, and depth of 2 units
+            var glassMaterial = new THREE.MeshPhongMaterial({
+                color: 0x222222, // Dark grey
+                specular: 0xFFFFFF, // White
+                shininess: 100,
+                opacity: 0.6,
+                transparent: true
+            });
+
+            var box1 = new THREE.Mesh(boxGeometry, glassMaterial);
+            box1.position.x = -1.25;
+            box1.position.y = sphere1.position.y;
+            box1.position.z = 5; // Position the boxes further away from the camera
+
+            var box2 = new THREE.Mesh(boxGeometry, glassMaterial);
+            box2.position.x = 1.25;
+            box2.position.y = sphere2.position.y;
+            box2.position.z = 5;// Position the boxes further away from the camera
+
+            // Add the boxes to the scene before the spheres
+            
+            scene.add( sphere1 );
+            scene.add( sphere2 );
+            scene.add( box1 );
+            scene.add( box2 );
+
+            // Create a point light
+            const pointLight = new THREE.PointLight(0xffffff, 1, 100);
+
+            // Set the position of the light
+            pointLight.position.set(0, 0, 10);
+
+            // Add the light to the scene
+            scene.add(pointLight);
+
+            // Create an ambient light
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+
+            // Add the ambient light to the scene
+            scene.add(ambientLight);
+
+camera.position.z = 10;
+
+			 // viewport_update
+			 window.addEventListener('resize', function( )
+            {
+                var width = window.innerWidth;
+                var height = window.innerHeight;
+                renderer.setSize(width,height);
+                camera.aspect = width/height;
+                camera.updateProjectionMatrix( );
+            });
+
+			// Scene rendering
+			function animate() {
+				requestAnimationFrame( animate );
+
+				// Scene animation
+				sphere1.rotation.x += 0.01;
+			    sphere1.rotation.y += 0.01;
+
+                sphere2.rotation.x += 0.01;
+                sphere2.rotation.y += 0.01;
+
+                box1.rotation.x += 0.01;
+                box1.rotation.y += 0.01;
+
+                box2.rotation.x += 0.01;
+                box2.rotation.y += 0.01;
+
+				renderer.render( scene, camera );
+			};
+
+			animate();
+		</script>
+	</body>
+</html>

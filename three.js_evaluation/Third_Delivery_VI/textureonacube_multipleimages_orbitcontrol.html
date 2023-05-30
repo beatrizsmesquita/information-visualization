@@ -1,0 +1,67 @@
+<!--
+
+Lesson 3 - Texture and Interaction
+
+Author: Beatriz Mesquita (115367)
+
+Data: December of 2022
+
+-->
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>3rd Assignment</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<script src="https://threejs.org/build/three.js"></script>
+        <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+		<script>
+			// Definition of the scene, camera, and renderer
+			const scene = new THREE.Scene();
+			const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			document.body.appendChild(renderer.domElement);
+
+			// Create the materials array
+			const materials = [];
+			materials.push(new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('./images/Im1.jpg') }));
+			materials.push(new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('./images/Im2.jpg') }));
+			materials.push(new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('./images/Im3.jpg') }));
+			materials.push(new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('./images/Im4.jpg') }));
+			materials.push(new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('./images/Im5.jpg') }));
+			materials.push(new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('./images/Im6.jpg') }));
+
+			// Create the cube using the materials array
+			const cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), materials);
+
+			// Add the cube to the scene
+			scene.add(cube);
+
+			// Set up OrbitControls
+			const controls = new THREE.OrbitControls(camera, renderer.domElement);
+			controls.enableDamping = true;
+			controls.dampingFactor = 0.25;
+			controls.enableZoom = true;
+
+			// Scene rendering
+			function animate() {
+				requestAnimationFrame(animate);
+
+				// Update the controls
+				controls.update();
+
+				// Render the scene
+				renderer.render(scene, camera);
+			};
+
+			animate();
+		</script>
+	</body>
+</html>

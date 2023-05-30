@@ -1,0 +1,121 @@
+<!--
+
+Lesson 2 - three.js Projections, lighting and transformations
+
+
+Author: Beatriz Mesquita (115367)
+
+Data: December of 2022
+
+-->
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>2nd Assignment</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<script src="https://threejs.org/build/three.js"></script>
+		<script>
+			// Created based on the tutorial available at: https://threejs.org/docs/index.html#manual/introduction/Creating-a-scene 
+			
+			
+			// Definition of the scene, camera, and renderer
+			const scene = new THREE.Scene();
+			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+       
+            // create the emerald, gold, and silver spheres
+            const emerald = new THREE.MeshPhongMaterial({
+            shading: THREE.SmoothShading
+            });
+
+            emerald.color = new THREE.Color(0.07568, 0.61424, 0.07568);
+            emerald.specular = new THREE.Color(0.633, 0.7278, 0.633);
+            emerald.shininess = 0.6 * 256;
+
+
+            const gold = new THREE.MeshPhongMaterial({
+            shading: THREE.SmoothShading
+            });
+            gold.color = new THREE.Color(0.75164, 0.60648, 0.22648);
+            gold.specular = new THREE.Color(0.628281, 0.555802, 0.366065);
+            gold.shininess = 0.4 * 256;
+
+
+            const silver = new THREE.MeshPhongMaterial({
+            shading: THREE.SmoothShading
+            });
+            silver.color = new THREE.Color(0.50754, 0.50754, 0.50754);
+            silver.specular = new THREE.Color(0.508273, 0.508273, 0.508273);
+            silver.shininess = 0.4 * 256;
+
+            // create the spheres
+            const sphereGeometry = new THREE.SphereGeometry(1, 10, 10);
+            const sphere1 = new THREE.Mesh(sphereGeometry, emerald);
+            sphere1.position.x = -2.5;
+            const sphere2 = new THREE.Mesh(sphereGeometry, gold);
+            sphere2.position.x = 0;
+            const sphere3 = new THREE.Mesh(sphereGeometry, silver);
+            sphere3.position.x = 2.5;
+
+            // add the spheres to the scene
+            scene.add(sphere1);
+            scene.add(sphere2);
+            scene.add(sphere3);
+
+            // create an ambient light
+            const ambientLight = new THREE.AmbientLight(0x404040);
+
+            // create a directional light
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            directionalLight.position.set(0, 5, 0);
+
+            // add the lights to the scene
+            scene.add(ambientLight);
+            scene.add(directionalLight);
+
+            // Camera position
+            camera.position.z = 5;
+
+             // viewport_update
+             window.addEventListener('resize', function( )
+            {
+                var width = window.innerWidth;
+                var height = window.innerHeight;
+                renderer.setSize(width,height);
+                camera.aspect = width/height;
+                camera.updateProjectionMatrix( );
+            });
+
+            
+			// Scene rendering
+			function animate() {
+				requestAnimationFrame( animate );
+
+				// Scene animation
+				sphere1.rotation.x += 0.01;
+				sphere1.rotation.y += 0.01;
+
+                sphere2.rotation.x += 0.01;
+                sphere2.rotation.y += 0.01;
+
+                sphere3.rotation.x += 0.01;
+                sphere3.rotation.y += 0.01;
+
+
+				renderer.render( scene, camera );
+			};
+
+			animate();
+		</script>
+	</body>
+</html>

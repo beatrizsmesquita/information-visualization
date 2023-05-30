@@ -1,0 +1,112 @@
+<!--
+
+Lesson 2 - three.js Projections, lighting and transformations
+
+Author: Beatriz Mesquita (115367)
+
+Data: December of 2022
+
+-->
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>2nd Assignment</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<script src="https://threejs.org/build/three.js"></script>
+		<script>
+            // Created based on: https://threejs.org/docs/#api/en/cameras/OrthographicCamera
+			const scene = new THREE.Scene();
+			
+			// Switch from perspective camera to  orthographic camera
+			// Set the aspect ratio of the window
+			let aspectRatio = window.innerWidth / window.innerHeight;
+
+			// Set the x and y limits of the camera's view
+			let xLimits = 3;
+			let yLimits = xLimits / aspectRatio;
+
+			// Create the camera
+			const camera = new THREE.OrthographicCamera(
+			-xLimits,  // left
+			xLimits,  // right
+			-yLimits,  // top
+			yLimits,  // bottom
+			0.1,      // near
+			1000      // far
+			);
+
+			// Set the position of the camera
+			camera.position.set(0, 0, 5);
+
+			// Point the camera at the origin
+			camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+			// Create the cube
+			const cube = new THREE.Mesh(
+			new THREE.BoxGeometry(1, 1, 1),
+			new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true })
+			);
+
+			// Add the cube to the scene
+			scene.add(cube);
+
+			// Set the size of the cube
+			cube.scale.set(xLimits, yLimits, 1);
+
+			// Add a function to update the camera and cube when the window is resized
+			function onWindowResize() {
+					// Update the aspect ratio of the window
+					aspectRatio = window.innerWidth / window.innerHeight;
+
+					// Update the x and y limits of the camera's view
+					xLimits = 3;
+					yLimits = xLimits / aspectRatio;
+
+					// Update the camera
+					camera.left = -xLimits;
+					camera.right = xLimits;
+					camera.top = yLimits;
+					camera.bottom = -yLimits;					
+					camera.updateProjectionMatrix();
+
+					// Update the size of the cube
+					cube.scale.set(xLimits, yLimits, 1);
+
+					// Update the size of the renderer
+					renderer.setSize(window.innerWidth, window.innerHeight);
+					}
+
+					// Add an event listener to trigger the function when the window is resized
+					window.addEventListener('resize', onWindowResize, false);
+
+
+					// Create the renderer
+					const renderer = new THREE.WebGLRenderer();
+
+					// Set the size of the renderer
+					renderer.setSize(window.innerWidth, window.innerHeight);
+
+					// Add the renderer to the DOM
+					document.body.appendChild(renderer.domElement);
+
+					// Create a loop to update and render the scene
+					function animate() {
+					requestAnimationFrame(animate);
+
+					// Render the scene
+					renderer.render(scene, camera);
+					}
+
+					// Start the loop
+					animate();
+
+		</script>
+	</body>
+</html>
+

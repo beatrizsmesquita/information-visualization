@@ -1,0 +1,171 @@
+<!--
+
+Lesson 3 - Texture and Interaction
+
+Author: Beatriz Mesquita (115367)
+
+Data: December of 2022
+
+-->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>3rd Assignment</title>
+    <style>
+      body { margin: 0; }
+    </style>
+  </head>
+  <body>
+    <script src="https://threejs.org/build/three.js"></script>
+    <script>
+      // Constants
+      const DISTANCE_FROM_EARTH = 356400;
+      const PERIOD = 28;
+      const INCLINATION = 0.089;
+      const SIZE_IN_EARTHS = 1 / 3.7;
+      const EARTH_RADIUS = 6371;
+
+      // Create a scene
+      const scene = new THREE.Scene();
+
+      // Create a camera
+      const camera = new THREE.PerspectiveCamera(
+        75,  // Field of view
+        window.innerWidth / window.innerHeight,  // Aspect ratio
+        0.1,  // Near clipping plane
+        1000  // Far clipping plane
+      );
+
+      // Create a renderer
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      // Load the textures
+      const texloader = new THREE.TextureLoader();
+      const texEarth = texloader.load("./images/earth_surface_2048.jpg");
+      const texMoon = texloader.load("./images/moon_1024.jpg");
+
+      // Create a Phong material for the earth with the earth texture
+      const materialEarth = new THREE.MeshPhongMaterial({map: texEarth});
+
+      // Create a sphere geometry for the earth
+      const geometryEarth = new THREE.SphereGeometry(1, 32, 32);
+
+      // Create a sphere mesh using the geometry and material for the earth
+      const earth = new THREE.Mesh(geometryEarth, materialEarth);
+
+      // Add the earth to the scene
+      scene.add(earth);
+
+      // Create a Phong material for the moon with the moon texture
+      const materialMoon = new THREE.MeshPhongMaterial({map: texMoon});
+
+      // Create a sphere geometry for the moon
+      const geometryMoon = new THREE.SphereGeometry(SIZE_IN_EARTHS, 32, 32);
+
+      // Create a sphere mesh using the geometry and material for the moon
+      const moon = new THREE.Mesh(geometryMoon, materialMoon);
+
+      // Add the moon to the earth as a child object
+      earth.add(moon);
+
+      // Set the initial position and orientation of the camera
+      camera.position.z = 3;
+      camera.rotation.z = 0.41;
+
+      // Add lighting to the scene
+      const ambientLight = new THREE.AmbientLight(0x333333);
+      scene.add(ambientLight);
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+      directionalLight.position.set(1, 0, 0);
+      scene.add(directionalLight);
+
+      // Set the initial rotation speed around the y axis and the inclination around the z axis
+      let rotationSpeed = 0.0025;
+      let inclination = 0;
+
+      // Set the initial position of the moon relative to the earth
+      var distance = DISTANCE_FROM_EARTH / EARTH_RADIUS;
+      moon.position.set(Math.sqrt(distance / 2), 0,-Math.sqrt(distance / 2));
+
+      // Rotate the moon so it shows its moon-face toward earth
+      moon.rotation.y = Math.PI;
+      moon.rotation.x = INCLINATION;
+
+      function animate() {
+        requestAnimationFrame(animate);
+
+        // Animate the earth
+        earth.rotation.y += rotationSpeed;
+
+        // Animate the moon
+        moon.rotation.y += (earth.rotation.y / PERIOD);
+
+        // Render the scene
+        renderer.render(scene, camera);
+      }
+
+      animate();
+
+      // Viewport update
+      window.addEventListener('resize', function() {
+        var width = window.innerWidth;
+        var height = window.innerHeight;
+        renderer.setSize(width, height);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+      });
+
+      // Add event listener for keydown events
+      document.addEventListener("keydown", onDocumentKeyDown, false);
+
+      function onDocumentKeyDown(event) {
+        // Get the key code of the pressed key
+        var keyCode = event.keyCode || event.code;
+
+        // Check for the L key
+        if (keyCode == 76 || keyCode == "KeyL") {
+          // Toggle the directional light on/off
+          if (directionalLight.intensity > 0) {
+            directionalLight.intensity = 0;
+          } else {
+            directionalLight.intensity = 1;
+          }
+        }
+        // Check for the + key
+        else if (keyCode == 187 || keyCode == "Equal") {
+          // Increase the intensity of the directional light
+          directionalLight.intensity += 0.1;
+        }
+        // Check for the - key
+        else if (keyCode == 189 || keyCode == "Minus") {
+          // Decrease the intensity of the directional light
+          directionalLight.intensity -= 0.1;
+        }
+        // Check for the left arrow key
+        else if (keyCode == 37 || keyCode == "ArrowLeft") {
+          // Decrease the rotation speed around the y axis
+          rotationSpeed -= 0.0005;
+        }
+        // Check for the right arrow key
+        else if (keyCode == 39 || keyCode == "ArrowRight") {
+          // Increase the rotation speed around the y axis
+          rotationSpeed += 0.0005;
+        }
+        // Check for the Up arrow key
+        else if (keyCode == 38 || keyCode == "ArrowUp") {
+          // Increase the inclination of the model around the z axis
+          inclination += 0.0005;
+        }
+        // Check for the Down arrow key
+        else if (keyCode == 40 || keyCode == "ArrowDown") {
+          // Decrease the inclination of the model around the z axis
+          inclination -= 0.0005;
+        }
+      }
+    </script>
+  </body>
+</html>

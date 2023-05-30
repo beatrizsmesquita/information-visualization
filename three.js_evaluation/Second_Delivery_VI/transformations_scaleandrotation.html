@@ -1,0 +1,138 @@
+<!--
+
+Lesson 2 - three.js Projections, lighting and transformations
+
+
+Author: Beatriz Mesquita (115367)
+
+Data: December of 2022
+
+-->
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>2nd Assignment</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<script src="https://threejs.org/build/three.js"></script>
+		<script>
+			// Created based on the tutorial available at: https://threejs.org/docs/index.html#manual/introduction/Creating-a-scene 
+			
+			
+			// Definition of the scene, camera, and renderer
+			const scene = new THREE.Scene();
+			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+        
+            const boxGeometry = new THREE.BoxGeometry(2, 1, 4);
+            const boxMaterial = new THREE.MeshBasicMaterial({color: 0x66ccff, transparent: true, opacity: 0.5});
+            const box = new THREE.Mesh(boxGeometry, boxMaterial);
+            box.position.set(0, 0, 0);
+
+            const sphereGeometry = new THREE.SphereGeometry(0.5, 8, 8);
+
+            // Create a canvas element
+            const canvas = document.createElement('canvas');
+
+            // Set the size of the canvas
+            canvas.width = 256;
+            canvas.height = 256;
+
+            // Get the canvas context
+            const context = canvas.getContext('2d');
+
+            // Create a linear gradient
+            const gradient = context.createLinearGradient(0, 0, canvas.width, canvas.height);
+
+            // Add color stops to the gradient
+            gradient.addColorStop(0, '#9C3F1E'); // light orange
+            gradient.addColorStop(1, '#DC582A'); // dark orange
+
+            // Fill the canvas with the gradient
+            context.fillStyle = gradient;
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Create a texture map from the canvas
+            const gradientTexture = new THREE.CanvasTexture(canvas);
+
+            // Set the gradient texture as the color map for the sphere material
+            const sphereMaterial = new THREE.MeshBasicMaterial({map: gradientTexture});
+
+            // Create the sphere meshes
+            const sphere1 = new THREE.Mesh(sphereGeometry, sphereMaterial);
+            sphere1.position.set(-1, -0.5, -2);
+
+            const sphere2 = new THREE.Mesh(sphereGeometry, sphereMaterial);
+            sphere2.position.set(1, -0.5, -2);
+
+            const sphere3 = new THREE.Mesh(sphereGeometry, sphereMaterial);
+            sphere3.position.set(-1, -0.5, 2);
+
+            const sphere4 = new THREE.Mesh(sphereGeometry, sphereMaterial);
+            sphere4.position.set(1, -0.5, 2);
+     
+            
+            const car = new THREE.Object3D();
+            car.add(box);
+            car.add(sphere1);
+            car.add(sphere2);
+            car.add(sphere3);
+            car.add(sphere4);
+
+            scene.add(car);
+            // Scale and rotation 
+            console.log(car.matrix);
+            console.log(sphere1.matrix);
+
+            // Camera position
+            camera.position.z = 7;
+            camera.position.y = 1;
+
+             // viewport_update
+             window.addEventListener('resize', function( )
+            {
+                var width = window.innerWidth;
+                var height = window.innerHeight;
+                renderer.setSize(width,height);
+                camera.aspect = width/height;
+                camera.updateProjectionMatrix( );
+            });
+
+            
+			// Scene rendering
+			function animate() {
+				requestAnimationFrame( animate );
+
+				// Scene animation
+				sphere1.rotation.x += 0.01;
+				sphere1.rotation.y += 0.01;
+
+                sphere2.rotation.x += 0.01;
+                sphere2.rotation.y += 0.01;
+
+                sphere3.rotation.x += 0.01;
+                sphere3.rotation.y += 0.01;
+
+                sphere4.rotation.x += 0.01;
+                sphere4.rotation.y += 0.01;
+
+				renderer.render( scene, camera );
+			};
+
+			animate();
+
+            // Transformation Matrices
+            console.log(box.matrix);
+            console.log(sphere1.matrix);
+		</script>
+	</body>
+</html>

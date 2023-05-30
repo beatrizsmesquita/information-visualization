@@ -1,0 +1,100 @@
+<!--
+
+Lesson 2 - three.js Projections, lighting and transformations
+
+
+Author: Beatriz Mesquita (115367)
+
+Data: December of 2022
+
+-->
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>2nd Assignment</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<script src="https://threejs.org/build/three.js"></script>
+		<script>
+			// Created based on the tutorial available at: https://threejs.org/docs/index.html#manual/introduction/Creating-a-scene 
+			
+			
+			// Definition of the scene, camera, and renderer
+			const scene = new THREE.Scene();
+			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+            // create a MeshLambertMaterial with a green color
+            var sphereMaterial1 = new THREE.MeshLambertMaterial({color: 0x00ff00});
+
+            // create a MeshPhongMaterial with a blue color and smooth shading
+            var sphereMaterial2 = new THREE.MeshPhongMaterial({color: 0x0000ff, flatShading: false});
+
+            // create a sphere geometry with radius 1 and 10 segments in each direction
+			var sphereGeometry = new THREE.SphereGeometry(1, 10, 10);
+
+            // create a MeshLambertMaterial with the same color as sphere2
+            var sphereMaterial1 = new THREE.MeshLambertMaterial({color: sphereMaterial2.color});
+
+            // remove the specular and shininess components from the material
+            sphereMaterial1.specular = new THREE.Color(0x000000);
+            sphereMaterial1.shininess = 0;
+
+            var sphere1 = new THREE.Mesh(sphereGeometry, sphereMaterial1);
+            sphere1.position.x = -2.5;
+
+            var sphere2 = new THREE.Mesh(sphereGeometry, sphereMaterial2);
+            sphere2.position.x = 2.5;
+
+            // create an ambient light
+            var ambientLight = new THREE.AmbientLight(0x404040);
+
+            // create a directional light
+            var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            directionalLight.position.set(0, 5, 0);
+
+            // add the lights to the scene
+            scene.add(ambientLight);
+            scene.add(directionalLight);
+            scene.add(sphere1);
+            scene.add(sphere2);
+
+			camera.position.z = 5;
+
+			 // viewport_update
+			 window.addEventListener('resize', function( )
+            {
+                var width = window.innerWidth;
+                var height = window.innerHeight;
+                renderer.setSize(width,height);
+                camera.aspect = width/height;
+                camera.updateProjectionMatrix( );
+            });
+			
+			// Scene rendering
+			function animate() {
+				requestAnimationFrame( animate );
+
+				// Scene animation
+				sphere1.rotation.x += 0.01;
+				sphere1.rotation.y += 0.01;
+
+                sphere2.rotation.x += 0.01;
+                sphere2.rotation.y += 0.01;
+
+
+				renderer.render( scene, camera );
+			};
+
+			animate();
+		</script>
+	</body>
+</html>

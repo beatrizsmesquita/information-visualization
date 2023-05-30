@@ -1,0 +1,84 @@
+<!--
+
+Lesson 3 - Texture and Interaction
+
+Author: Beatriz Mesquita (115367)
+
+Data: December of 2022
+
+-->
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>3rd Assignment</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<script src="https://threejs.org/build/three.js"></script>
+		<script>
+			// Create a BoxGeometry object
+			var geometry = new THREE.BoxGeometry(1, 1, 1);
+
+			// Create an array of textures
+			var textures = [];
+
+			// Load each image and add it to the array
+			textures.push(new THREE.TextureLoader().load('./images/Im1.jpg'));
+			textures.push(new THREE.TextureLoader().load('./images/Im2.jpg'));
+			textures.push(new THREE.TextureLoader().load('./images/Im3.jpg'));
+			textures.push(new THREE.TextureLoader().load('./images/Im4.jpg'));
+			textures.push(new THREE.TextureLoader().load('./images/Im5.jpg'));
+			textures.push(new THREE.TextureLoader().load('./images/Im6.jpg'));
+
+			// Create an array of materials
+			var materials = [];
+
+			// Add a MeshBasicMaterial with each texture to the materials array
+			for (var i = 0; i < textures.length; i++) {
+				materials.push(new THREE.MeshBasicMaterial({ map: textures[i] }));
+			}
+
+			// Create the cube with the array of materials
+			var cube = new THREE.Mesh(geometry, materials);
+
+			// Definition of the scene, camera, and renderer
+			const scene = new THREE.Scene();
+			const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			document.body.appendChild(renderer.domElement);
+
+			// Add the cube to the scene
+			scene.add(cube);
+
+            // Camera position
+            camera.position.z = 3;
+
+			// Scene rendering
+			function animate() {
+				requestAnimationFrame(animate);
+
+                // Scene animation
+				cube.rotation.x += 0.01;
+				cube.rotation.y += 0.01;
+
+				renderer.render(scene, camera);
+			}
+			animate();
+
+            // viewport_update
+            window.addEventListener('resize', function() {
+                var width = window.innerWidth;
+                var height = window.innerHeight;
+                renderer.setSize(width, height);
+                camera.aspect = width/height;
+                camera.updateProjectionMatrix();
+            });
+
+        </script>
+    </body>
+</html>
